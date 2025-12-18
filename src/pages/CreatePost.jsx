@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getToken, decodeToken, getAuthHeader } from "../auth";
+import { apiFetch } from "../api";
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -19,7 +20,7 @@ const CreatePost = () => {
     const payload = decodeToken(token);
     const userID = payload?.id;
     try {
-      const res = await fetch("http://localhost:3000/api/posts", {
+      const res = await apiFetch("/api/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

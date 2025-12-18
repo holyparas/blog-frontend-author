@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getToken, decodeToken } from "../auth";
+import { apiFetch } from "../api";
 
 const MyPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -8,7 +9,7 @@ const MyPosts = () => {
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/posts");
+        const res = await apiFetch("http://localhost:3000/api/posts");
         if (!res.ok) throw new Error("Failed to fetch posts");
         const data = await res.json();
         const token = getToken();
