@@ -9,7 +9,7 @@ const MyPosts = () => {
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
-        const res = await apiFetch("http://localhost:3000/api/posts");
+        const res = await apiFetch("/api/posts");
         if (!res.ok) throw new Error("Failed to fetch posts");
         const data = await res.json();
         const token = getToken();
