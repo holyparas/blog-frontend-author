@@ -18,11 +18,10 @@ const Register = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Registration failed");
-        return;
-      }
+      // if (!res.ok) {
+      //   setError(data.error || "Registration failed");
+      //   return;
+      // }
       // success -> go to login
       navigate("/login");
     } catch (err) {
