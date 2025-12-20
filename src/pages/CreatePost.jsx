@@ -33,11 +33,11 @@ const CreatePost = () => {
           date: new Date().toISOString(),
         }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Failed to create post");
-        return;
-      }
+      // const data = await res.json();
+      // if (!res.ok) {
+      //   setError(data.error || "Failed to create post");
+      //   return;
+      // }
       setSuccess("Post created");
       setTitle("");
       setPost("");

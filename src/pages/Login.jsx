@@ -19,12 +19,12 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Login failed");
-        return;
-      }
-      login(data.token);
+      // const data = await res.json();
+      // if (!res.ok) {
+      //   setError(data.error || "Login failed");
+      //   return;
+      // }
+      login(res.token);
       navigate("/");
     } catch (err) {
       console.error(err);

@@ -10,12 +10,12 @@ const MyPosts = () => {
     const fetchMyPosts = async () => {
       try {
         const res = await apiFetch("/api/posts");
-        if (!res.ok) throw new Error("Failed to fetch posts");
-        const data = await res.json();
+        // if (!res.ok) throw new Error("Failed to fetch posts");
+        // const data = await res.json();
         const token = getToken();
         const payload = decodeToken(token);
         const myId = payload?.id;
-        const myPosts = data.filter((p) => p.user_id === myId);
+        const myPosts = res.filter((p) => p.user_id === myId);
         setPosts(myPosts);
       } catch (err) {
         console.error(err);

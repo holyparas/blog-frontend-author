@@ -14,13 +14,13 @@ const Home = () => {
     const fetchMyPosts = async () => {
       try {
         const res = await apiFetch("/api/posts");
-        if (!res.ok) throw new Error("Failed to fetch posts");
-        const data = await res.json();
+        // if (!res.ok) throw new Error("Failed to fetch posts");
+        // const data = await res.json();
         const token = getToken();
         const payload = decodeToken(token);
         if (!payload) return; // not logged in
         const myId = payload?.id;
-        const my = data.filter((p) => p.user_id === myId).slice(0, 3);
+        const my = res.filter((p) => p.user_id === myId).slice(0, 3);
         setMyPosts(my);
       } catch (err) {
         console.error(err);
