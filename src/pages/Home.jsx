@@ -10,8 +10,17 @@ const Home = () => {
   const [myPosts, setMyPosts] = useState([]);
   const [error, setError] = useState("");
 
+  const wakeBackend = async () => {
+    try {
+      await apiFetch("/hello");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     const fetchMyPosts = async () => {
+      await wakeBackend();
       try {
         const res = await apiFetch("/api/posts");
         // if (!res.ok) throw new Error("Failed to fetch posts");
