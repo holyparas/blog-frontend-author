@@ -7,28 +7,27 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // 👈 add this
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true); // 👈 start spinner
     try {
       const res = await apiFetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      // const data = await res.json();
-      // if (!res.ok) {
-      //   setError(data.error || "Login failed");
-      //   return;
-      // }
       login(res.token);
       navigate("/");
     } catch (err) {
       console.error(err);
       setError("Network error");
+    } finally {
+      setLoading(false); // 👈 stop spinner always, even on error
     }
   };
 
@@ -71,10 +70,37 @@ const Login = () => {
           }}
         />
         <button
-          className="px-4 py-2 rounded-md text-white mt-2 hover:opacity-90"
+          disabled={loading} // 👈 disable while loading
+          className="px-4 py-2 rounded-md text-white mt-2 hover:opacity-90 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           style={{ backgroundColor: "var(--accent)" }}
         >
-          Login
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8z"
+                />
+              </svg>
+              Logging in...
+            </>
+          ) : (
+            "Login"
+          )}
         </button>
       </form>
     </div>

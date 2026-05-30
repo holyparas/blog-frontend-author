@@ -5,6 +5,7 @@ import { apiFetch } from "../api";
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -33,14 +34,33 @@ const CreatePost = () => {
           date: new Date().toISOString(),
         }),
       });
-      // const data = await res.json();
-      // if (!res.ok) {
-      //   setError(data.error || "Failed to create post");
-      //   return;
-      // }
       setSuccess("Post created");
       setTitle("");
       setPost("");
+    } catch (err) {
+      console.error(err);
+      setError("Network error");
+    }
+  };
+  const onGenerate = async (e) => {
+    const token = getToken();
+    if (!token) {
+      setError("You must be logged in to create a post");
+      return;
+    }
+    const payload = decodeToken(token);
+    const userID = payload?.id;
+    try {
+      const res = await apiFetch("/api/ai/generate-meta", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          post,
+          userID,
+        }),
+      });
+      setSuccess("Generate metadata success");
+      console.log(res);
     } catch (err) {
       console.error(err);
       setError("Network error");
@@ -96,8 +116,54 @@ const CreatePost = () => {
         <button
           className="px-4 py-2 rounded-md text-white mt-2 hover:opacity-90"
           style={{ backgroundColor: "var(--accent)" }}
+          type="button"
+          onClick={onGenerate}
         >
-          Create
+          Generate metadata
+        </button>
+        <textarea
+          value={post}
+          onChange={(e) => setFormData()}
+          placeholder="Post summary..."
+          rows={4}
+          required
+          className="w-full px-3 py-2 rounded-md border"
+          style={{
+            backgroundColor: "var(--surface)",
+            borderColor: "var(--border)",
+            color: "var(--text)",
+          }}
+        />
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="SEO description"
+          required
+          className="w-full px-3 py-2 rounded-md border"
+          style={{
+            backgroundColor: "var(--surface)",
+            borderColor: "var(--border)",
+            color: "var(--text)",
+          }}
+        />
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="tags"
+          required
+          className="w-full px-3 py-2 rounded-md border"
+          style={{
+            backgroundColor: "var(--surface)",
+            borderColor: "var(--border)",
+            color: "var(--text)",
+          }}
+        />
+        <button
+          className="px-4 py-2 rounded-md text-white mt-2 hover:opacity-90"
+          style={{ backgroundColor: "var(--accent)" }}
+          type="submit"
+        >
+          Create Post
         </button>
       </form>
     </div>
